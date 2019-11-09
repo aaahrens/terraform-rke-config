@@ -25,6 +25,9 @@ variable "ingress-enabled" {
   type = bool
 }
 
+variable "extra_binds" {
+  type = list(string)
+}
 
 resource "template_file" "nodes" {
   template = <<NODES
@@ -33,6 +36,7 @@ nodes:
 - address: ${server.address}
   user: ${server.user}
   port: ${server.port}
+  role: ${server.role}
 %{if server.ssh_key_path != ""}
   ssh_key_path: ${server.ssh_key_path}
 %{ endif }
@@ -51,6 +55,23 @@ ingress:
 ingress:
   provider: none
 %{endif}
+services:
+ kubelet:
+  # Base domain for the cluster
+  cluster_domain: cluster.local
+  # IP address for the DNS service endpoint
+  cluster_dns_server: 10.43.0.10
+  # Fail if swap is on
+  fail_swap_on: false
+  # Set max pods to 250 instead of default 110
+  extra_args:
+    max-pods: 250
+  # Optionally define additional volume binds to a service
+  extra_binds:
+    - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins"
+    %{for bind in ${var.extra_binds} ~}
+    - ${bind}
+    %{endfor }
 NODES
 
 }
