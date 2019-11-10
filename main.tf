@@ -37,7 +37,10 @@ nodes:
 - address: ${server.address}
   user: ${server.user}
   port: ${server.port}
-  role: ${server.role}
+  role:
+  %{for role in server.role}
+    - ${role}
+  %{endfor }
 %{if server.ssh_key_path != ""}
   ssh_key_path: ${server.ssh_key_path}
 %{ endif }
