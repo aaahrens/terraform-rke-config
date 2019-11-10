@@ -45,7 +45,7 @@ nodes:
 %{if length(server.labels) != 0 ~}
   labels:
 %{for label in server.labels ~}
-    ${label.key}:${label.value}
+    ${label.key}: ${label.value}
 %{endfor~}
 %{endif~}
 %{if server.ssh_key_path != ""}
