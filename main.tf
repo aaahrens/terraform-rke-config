@@ -27,6 +27,7 @@ variable "ingress-enabled" {
 
 variable "extra_binds" {
   type = list(string)
+  default = []
 }
 
 resource "template_file" "nodes" {
@@ -69,7 +70,7 @@ services:
   # Optionally define additional volume binds to a service
   extra_binds:
     - "/usr/libexec/kubernetes/kubelet-plugins:/usr/libexec/kubernetes/kubelet-plugins"
-    %{for bind in ${var.extra_binds} ~}
+    %{for bind in var.extra_binds ~}
     - ${bind}
     %{endfor }
 NODES
