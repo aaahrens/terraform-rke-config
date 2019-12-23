@@ -51,7 +51,7 @@ nodes:
 %{if length(server.taints) != 0 ~}
   taints:
 %{for taint in server.taints ~}
-  - key: ${taint.key}:
+  - key: ${taint.key}
     value: ${taint.value}
     effect: ${taint.effect}
 %{endfor~}
