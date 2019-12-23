@@ -48,6 +48,14 @@ nodes:
     ${label.key}: ${label.value}
 %{endfor~}
 %{endif~}
+%{if length(server.taints) != 0 ~}
+  taints:
+%{for taint in server.taints ~}
+  - key: ${taint.key}:
+    value: ${taint.value}
+    effect: ${taint.effect}
+%{endfor~}
+%{endif~}
 %{if server.ssh_key_path != ""}
   ssh_key_path: ${server.ssh_key_path}
 %{endif}
